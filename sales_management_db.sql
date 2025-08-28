@@ -34,12 +34,11 @@ insert into salesman values
 -- view all records in the salesman table
 select * from salesman;
 
--- example: drop the salesman table (commented out for safety)
+-- example: drop the salesman table
 -- drop table salesman;
 
--- example: delete a specific record from salesman table (commented out for safety)
--- delete from salesman
--- where salesmanid = 102;
+-- example: delete a specific record from the salesman table
+-- delete from salesman where salesmanid = 102;
 
 
 /* ============================================================
@@ -83,57 +82,50 @@ insert into orders values
 
 select * from orders
 
--- Upto here we have added some table. Now we perform some task
+-- Upto here we have added some tables. Now we perform some task
 
 --1. Insert a new record in your Orders table.
 
 insert into orders values(5002,2545,109,'2025-08-27',2000);
 
---2. Add Primary key constraint for SalesmanId column in Salesman table. Add default
-    -- constraint for City column in Salesman table. Add Foreign key constraint for SalesmanId
-    -- column in Customer table. Add not null constraint in Customer_name column for the
+--2. Add a Primary key constraint for the SalesmanId column in the Salesman table. Add default
+    -- constraint for the City column in the Salesman table. Add a Foreign key constraint for SalesmanId
+    -- column in the Customer table. Add a not null constraint in the Customer_name column for the
     -- Customer table.
 alter table salesman alter column salesmanid int not null;
 alter table salesman add constraint pk_salesman primary key(salesmanid);
 alter table salesman add constraint df_salesman_city default 'unknown' for city;
-
-insert into salesman values (107, 'vaibhav', 150, 'Surat', 28), (110, 'yagnik', 520, 'Delhi', 22);
-
 alter table customer add constraint fk_customer foreign key(salesmanid)  references salesman(salesmanid);
-
 alter table customer alter column customername varchar(20) not null; 
 
+-- To see all the table
 select * from customer;
 select * from salesman;
 select * from orders;
 
---3.Fetch the data where the Customer’s name is ending with ‘a’ also get the purchase
-    --amount value greater than 500.
+--3. Fetch the data where the Customerâ€™s name ends with â€˜aâ€™ also get the purchase amount value greater than 500.
 
 	select * from customer where customername like '%a' and purchaseamount > 500;
 
 
---4. Using SET operators, retrieve the first result with unique SalesmanId values from two
-    --tables, and the other result containing SalesmanId with duplicates from two tables.
+--4. Using SET operators, retrieve the first result with unique SalesmanId values from two tables, and the other result containing SalesmanId with duplicates from two tables.
 
 	select salesmanid from salesman union select salesmanid from customer;
-
-	select salesmanid from salesman union all select salesmanid from customer;
+    select salesmanid from salesman union all select salesmanid from customer;
 
 	-- just for trial
 	select salesmanid from salesman union select salesmanid from customer union select salesmanid from orders;
 	select salesmanid from salesman union all select salesmanid from customer union all select salesmanid from orders;
 
---5. Display the below columns which has the matching data.
-    -- Orderdate, Salesman Name, Customer Name, Commission, and City which has the
-    --range of Purchase Amount between 500 to 1500.
+--5. Display the columns below which has the matching data.
+    -- Orderdate, Salesman Name, Customer Name, Commission, and City which has the range of Purchase Amount between 500 to 1500.
     
 	select o.orderdate, s.salesmanname, c.customername, s.commision, s.city from orders o 
 	join salesman s on o.salesmanid = s.salesmanid
 	join customer c on o.customerid = c.customerid
 	where c.purchaseamount between 500 and 1500;
 
---6. using right join fetch all the results from salesman and orders table.
+--6. Using right join fetch all the results from the salesman and orders table.
 select s.salesmanid, s.salesmanname, o.orderid, o.orderdate, o.amount
 from salesman s
 right join orders o on s.salesmanid = o.salesmanid;
@@ -141,4 +133,5 @@ right join orders o on s.salesmanid = o.salesmanid;
 select * from customer;
 select * from salesman;
 select * from orders;
+
 
